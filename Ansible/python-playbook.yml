@@ -1,25 +1,21 @@
 ---
 - hosts: webservers
+  become: true
   tasks:
   - name: Install Docker
     shell: |
       yum install python-pip docker -y
-    become: true
   - name: Add the user to the docker group
-    command: usermod -a -G docker ec2-user #echo "$(id ec2-user)"
-    become: true
+    command: usermod -a -G docker ec2-user 
   - name: Start Docker service
     service:
       name: docker
       state: started
       enabled: yes
-    become: yes
   - name: log into docker hub registry
-    become: yes
     command: docker login -u="jonesthomas" -p="Jonesthomas@1"
   - name: Stop all running container
     command: docker rm -f python-flask-app
-    become: true
   - name: Remove the old image
     command: docker rmi DOCKERIMAGETAGS
     become: true
