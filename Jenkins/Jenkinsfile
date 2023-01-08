@@ -1,8 +1,12 @@
+
 pipeline {
 
   environment {
     registry = "jonesthomas/first-node-app"
     dockerimagename = "jonesthomas/first-node-app"
+    dockerimagetags = "jonesthomas/first-node-app:${env.BUILD_NUMBER}"
+    // def buildnumber  = "${env.BUILD_NUMBER}"
+    // def pre_build = ${env.BUILD_NUMBER} as int - 1
     dockerImage = ""
   }
 
@@ -37,14 +41,25 @@ pipeline {
       }
     }
 
-    // stage('Deploy') {
-    //   steps {
-            
-    //         sh "pwd"
-    //   }
-    // }
+    stage('Deploy') {
+      steps {
+            // credentialsId: 'private_key', inventory: 'inventories/a/hosts',
+            // sed -i -e 's/few/asd/g' hello.txt
+            sh "pwd"
+            // sh "sed -i 's/DOCKERIMAGETAGS/$dockerimagetags/g' ./Ansible/python-playbook.yml"
+            sh """
+            sed -i "s|DOCKERIMAGETAGS|$dockerimagetags|g" ./Ansible/python-playbook.yml
+            """
+            // sh "cat ./Ansible/python-playbook.yml"
+            // sh "echo 'jonesthomas/first-node-app:$pre_build'"
+            // ansiblePlaybook(playbook: './Ansible/python-playbook.yml')
+            sh "ansible-playbook ./Ansible/python-playbook.yml"
+            sh "pwd"
+      }
+    }
     stage('Cleaning up') {
         steps{
+            sh "docker rmi $dockerimagename:${env.BUILD_NUMBER}"
             sh "docker rmi $dockerimagename"
         }
     }
