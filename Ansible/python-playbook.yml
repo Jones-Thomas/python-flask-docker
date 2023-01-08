@@ -16,10 +16,10 @@
     command: docker login -u="jonesthomas" -p="Jonesthomas@1"
   - name: Stop all running container
     # command: docker rm -f python-flask-app
-    command: docker rm -vf $(docker ps -aq)
+    command: sudo docker rm -vf $(docker ps -aq)
   - name: Remove the old image
     # command: docker rmi DOCKERIMAGETAGS
-    command: docker rmi -f $(docker images -aq)
+    command: sudo docker rmi -f $(docker images -aq)
   - name: Ensure a container is running
     command: docker run -d --name python-flask-app -p 5000:5000 DOCKERIMAGETAGS
   - name: Log out of DockerHub
