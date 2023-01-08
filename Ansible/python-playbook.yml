@@ -23,6 +23,6 @@
     command: docker rmi --force $(docker images --all --quiet)
     ignore_errors: yes
   - name: Ensure a container is running
-    command: docker run -d --name python-flask-app -p 5000:5000 DOCKERIMAGETAGS
+    command: docker run -d --name DOCKERIMAGETAGS -p 5000:5000 DOCKERIMAGETAGS
   - name: Log out of DockerHub
     command: docker logout
