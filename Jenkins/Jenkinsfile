@@ -1,4 +1,3 @@
-
 pipeline {
 
   environment {
@@ -40,6 +39,12 @@ pipeline {
         }
       }
     }
+    stage('Cleaning up') {
+        steps{
+            sh "docker rmi $dockerimagename:${env.BUILD_NUMBER}"
+            sh "docker rmi $dockerimagename"
+        }
+    }
 
     stage('Deploy') {
       steps {
@@ -53,15 +58,9 @@ pipeline {
             // sh "cat ./Ansible/python-playbook.yml"
             // sh "echo 'jonesthomas/first-node-app:$pre_build'"
             // ansiblePlaybook(playbook: './Ansible/python-playbook.yml')
-            sh "ansible-playbook ./Ansible/python-playbook.yml"
+            sh "sudo ansible-playbook ./Ansible/python-playbook.yml"
             sh "pwd"
       }
-    }
-    stage('Cleaning up') {
-        steps{
-            sh "docker rmi $dockerimagename:${env.BUILD_NUMBER}"
-            sh "docker rmi $dockerimagename"
-        }
     }
   }
 }
